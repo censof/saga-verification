@@ -1,0 +1,48 @@
+---
+# tasks file for saga_services
+- hosts: all 
+  tasks:
+
+
+    - name: supervisord
+      shell: ps -ef | grep supervisord
+      ignore_errors: yes
+      changed_when: false
+      register: supervisor_status
+
+    - name: radiusd
+      shell: ps -ef | grep radiusd
+      ignore_errors: yes
+      changed_when: false
+      register: radiusd_status
+
+    - name: gasd
+      shell: ps -ef | grep gasd
+      ignore_errors: yes
+      changed_when: false
+      register: gasd_status
+
+    - name: fastcgi
+      shell: ps -ef | grep fast
+      ignore_errors: yes
+      changed_when: false
+      register: gasd_status
+
+    - name: Zope
+      shell: ps -ef | grep zope
+      ignore_errors: yes
+      changed_when: false
+      register: zope_status
+
+    - name: Check Apache2 is running
+      shell: ps -ef |grep apache2 
+      ignore_errors: yes
+      changed_when: false
+      register: service_apache2_status
+
+    - name: Check if Apache is running
+      command: service httpd status
+      ignore_errors: yes
+      changed_when: false
+      register: service_apache_status
+
