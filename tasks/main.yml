@@ -26,10 +26,17 @@
       when: database == "informix"
 
     - block:
-        - name: Check if postgresql is installed
+        - name: Check if postgresql is installed (Debian)
           command: dpkg -l postgresql
-          register: check_rpm_postgresql
+          register: check_postgresql
           ignore_errors: True
+          when: ansible_distribution == 'Debian' or ansible_distribution = 'Ubuntu'
+
+        - name: Check if postgresql is installed (RedHat)
+          command: rpm -q postgresql
+          register: check_postgresql
+          ignore_errors: True
+          when: ansible_distribution == 'CentOS' or ansible_distribution = 'Red Hat Enterprise Linux'
 
         - name: Verify /pgdata directory exists
           stat:
@@ -43,6 +50,6 @@
 
         - name: Capture failures
           fail: msg="Prerequisite directory for postgres missing"
-          when: not pgdata.stat.exists or not pglog.stat.exists or check_rpm_postgresql.stdout.find('no packages found') != -1
+          when: not pgdata.stat.exists or not pglog.stat.exists or check_postgresql.stdout.find('no packages found') != -1
 
       when: database == "postgres"
