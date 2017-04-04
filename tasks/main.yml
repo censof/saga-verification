@@ -8,6 +8,11 @@
         database: passwd
         key: acct
 
+    - name: Ensure the existence of the acct group
+      getent:
+        database: group
+        key: acct
+
     - block:
         - name: Verify informix appl directory exists
           stat:
